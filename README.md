@@ -1,4 +1,12 @@
-# kickstart.nvim
+# My Neovim Config, based on kickstart.nvim
+
+## Preface
+
+I'm uploading this mostly so I can more easily share my nvim config between 
+devices, but if you find it useful, even better!
+
+If you don't have a $MYVIMRC_NIX environment variable set, remember to set the 
+<leader>jc command to use $MYVIMRC instead
 
 ## Introduction
 
