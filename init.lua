@@ -253,6 +253,7 @@ require('lazy').setup({
   'mbbill/undotree',
   'tpope/vim-fugitive',
   'nvim-neotest/nvim-nio',
+  'dstein64/nvim-scrollview',
 
   -- NOTE: Plugins can also be added by using a table,
   -- with the first argument being the link and the following
