@@ -8,6 +8,8 @@ devices, but if you find it useful, even better!
 If you don't have a $MYVIMRC_NIX environment variable set, remember to set the 
 <leader>jc command to use $MYVIMRC instead
 
+The remainder of this README is unchanged from kickstart.nvim
+
 ## Introduction
 
 A starting point for Neovim that is:
