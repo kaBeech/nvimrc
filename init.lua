@@ -347,7 +347,7 @@ require('lazy').setup({
         ['<leader>c'] = { name = '[C]ode', _ = 'which_key_ignore' },
         ['<leader>d'] = { name = '[D]ocument', _ = 'which_key_ignore' },
         ['<leader>j'] = { name = '[J]ump To', _ = 'which_key_ignore' },
-        ['<leader>r'] = { name = '[R]ename', _ = 'which_key_ignore' },
+        ['<leader>r'] = { name = '[R]ename or [R]efactor', _ = 'which_key_ignore' },
         ['<leader>s'] = { name = '[S]earch', _ = 'which_key_ignore' },
         ['<leader>w'] = { name = '[W]orkspace', _ = 'which_key_ignore' },
         ['<leader>t'] = { name = '[T]oggle', _ = 'which_key_ignore' },
@@ -583,7 +583,7 @@ require('lazy').setup({
 
           -- Rename the variable under your cursor
           --  Most Language Servers support renaming across files, etc.
-          map('<leader>rn', vim.lsp.buf.rename, '[R]e[n]ame')
+          map('<leader>rn', vim.lsp.buf.rename, '[R]e[n]ame') -- COC Override
 
           -- Execute a code action, usually your cursor needs to be on top of an error
           -- or a suggestion from your LSP for this to activate.
@@ -591,7 +591,7 @@ require('lazy').setup({
 
           -- Opens a popup that displays documentation about the word under your cursor
           --  See `:help K` for why this keymap
-          map('K', vim.lsp.buf.hover, 'Hover Documentation')
+          map('K', vim.lsp.buf.hover, 'Hover Documentation') -- COC Override
 
           -- WARN: This is not Goto Definition, this is Goto Declaration.
           --  For example, in C this would take you to the header
@@ -603,7 +603,7 @@ require('lazy').setup({
           --
           -- When you move your cursor, the highlights will be cleared (the second autocommand).
           local client = vim.lsp.get_client_by_id(event.data.client_id)
-          if client and client.server_capabilities.documentHighlightProvider then
+          if client and client.server_capabilities.documentHighlightProvider then -- COC Override
             local highlight_augroup = vim.api.nvim_create_augroup('kickstart-lsp-highlight', { clear = false })
             vim.api.nvim_create_autocmd({ 'CursorHold', 'CursorHoldI' }, {
               buffer = event.buf,
@@ -728,7 +728,7 @@ require('lazy').setup({
     end,
   },
 
-  { -- Autoformat
+  { -- Autoformat -- COC Override
     'stevearc/conform.nvim',
     lazy = false,
     keys = {
@@ -761,7 +761,7 @@ require('lazy').setup({
     },
   },
 
-  { -- Autocompletion
+  { -- Autocompletion -- COC Override
     'hrsh7th/nvim-cmp',
     event = 'InsertEnter',
     dependencies = {
@@ -990,6 +990,198 @@ require('lazy').setup({
     end,
   },
 
+     -- This should be a toggleable jump-in for COC, just uncomment this and 
+     -- comment out the code noted as COC Override above. I adjusted any 
+     -- keymaps that seemed contradictory. I haven't actually tried it though 
+     -- because I've since learned to use cmp better
+  -- { -- COC Experimentation... Autocompletion replacement for cmp
+  --   'neoclide/coc.nvim', 
+  --   event = 'InsertEnter',  -- This may need to be changed to 'VimEnter'
+  --   config = function()
+  --     
+  --     -- Some servers have issues with backup files, see #649
+  --     vim.opt.backup = false
+  --     vim.opt.writebackup = false
+  --
+  --     local keyset = vim.keymap.set
+  --     -- Autocomplete
+  --     function _G.check_back_space()
+  --       local col = vim.fn.col('.') - 1
+  --       return col == 0 or vim.fn.getline('.'):sub(col, col):match('%s') ~= nil
+  --     end
+  --
+  --
+  --
+  --     -- Use <C-n> and <C-p> for trigger completion with characters ahead and navigate
+  --     -- NOTE - There's always a completion item selected by default, you may want to enable
+  --     -- no select by setting `"suggest.noselect": true` in your configuration file
+  --     -- NOTE - Use command ':verbose imap <C-n>' to make sure <C-n> is not mapped by
+  --     -- other plugins before putting this into your config
+  --     local opts = {silent = true, noremap = true, expr = true, replace_keycodes = false}
+  --     keyset("i", "<C-n>", 'coc#pum#visible() ? coc#pum#next(1) : v:lua.check_back_space() ? "<TAB>" : coc#refresh()', opts)
+  --     keyset("i", "<C-p>", [[coc#pum#visible() ? coc#pum#prev(1) : "\<C-h>"]], opts)
+  --     
+  --     -- Make <CR> to accept selected completion item or notify coc.nvim to format
+  --     -- <C-g>u breaks current undo, please make your own choice
+  --     keyset("i", "<C-y>", [[coc#pum#visible() ? coc#pum#confirm() : "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"]], opts)
+  --     
+  --     -- Use <c-j> to trigger snippets
+  --     keyset("i", "<c-j>", "<Plug>(coc-snippets-expand-jump)")
+  --     -- Use <c-space> to trigger completion
+  --     keyset("i", "<c-space>", "coc#refresh()", {silent = true, expr = true})
+  --     
+  --     -- Use `[g` and `]g` to navigate diagnostics
+  --     -- Use `:CocDiagnostics` to get all diagnostics of current buffer in location list
+  --     keyset("n", "[g", "<Plug>(coc-diagnostic-prev)", {silent = true})
+  --     keyset("n", "]g", "<Plug>(coc-diagnostic-next)", {silent = true})
+  --     
+  --     -- GoTo code navigation
+  --     keyset("n", "<leader>gd", "<Plug>(coc-definition)", {silent = true})
+  --     keyset("n", "<leader>gy", "<Plug>(coc-type-definition)", {silent = true})
+  --     keyset("n", "<leader>gi", "<Plug>(coc-implementation)", {silent = true})
+  --     keyset("n", "<leader>gr", "<Plug>(coc-references)", {silent = true})
+  --
+  --
+  --     -- Use K to show documentation in preview window
+  --     function _G.show_docs()
+  --         local cw = vim.fn.expand('<cword>')
+  --         if vim.fn.index({'vim', 'help'}, vim.bo.filetype) >= 0 then
+  --             vim.api.nvim_command('h ' .. cw)
+  --         elseif vim.api.nvim_eval('coc#rpc#ready()') then
+  --             vim.fn.CocActionAsync('doHover')
+  --         else
+  --             vim.api.nvim_command('!' .. vim.o.keywordprg .. ' ' .. cw)
+  --         end
+  --     end
+  --     keyset("n", "K", '<CMD>lua _G.show_docs()<CR>', {silent = true})
+  --     
+  --     
+  --     -- Highlight the symbol and its references on a CursorHold event(cursor is idle)
+  --     vim.api.nvim_create_augroup("CocGroup", {})
+  --     vim.api.nvim_create_autocmd("CursorHold", {
+  --         group = "CocGroup",
+  --         command = "silent call CocActionAsync('highlight')",
+  --         desc = "Highlight symbol under cursor on CursorHold"
+  --     })
+  --     
+  --     
+  --     -- Symbol renaming
+  --     keyset("n", "<leader>rn", "<Plug>(coc-rename)", {silent = true})
+  --     
+  --     
+  --     -- Formatting selected code
+  --     keyset("x", "<leader>f", "<Plug>(coc-format-selected)", {silent = true})
+  --     keyset("n", "<leader>f", "<Plug>(coc-format-selected)", {silent = true})
+  --     
+  --     
+  --     -- Setup formatexpr specified filetype(s)
+  --     vim.api.nvim_create_autocmd("FileType", {
+  --         group = "CocGroup",
+  --         pattern = "typescript,json",
+  --         command = "setl formatexpr=CocAction('formatSelected')",
+  --         desc = "Setup formatexpr specified filetype(s)."
+  --     })
+  --     
+  --     -- Update signature help on jump placeholder
+  --     vim.api.nvim_create_autocmd("User", {
+  --         group = "CocGroup",
+  --         pattern = "CocJumpPlaceholder",
+  --         command = "call CocActionAsync('showSignatureHelp')",
+  --         desc = "Update signature help on jump placeholder"
+  --     })
+  --     
+  --     -- Apply codeAction to the selected region
+  --     -- Example: `<leader>aap` for current paragraph
+  --     local opts = {silent = true, nowait = true}
+  --     keyset("x", "<leader>A", "<Plug>(coc-codeaction-selected)", opts)
+  --     keyset("n", "<leader>A", "<Plug>(coc-codeaction-selected)", opts)
+  --     
+  --     -- Remap keys for apply code actions at the cursor position.
+  --     keyset("n", "<leader>Ac", "<Plug>(coc-codeaction-cursor)", opts)
+  --     -- Remap keys for apply source code actions for current file.
+  --     keyset("n", "<leader>As", "<Plug>(coc-codeaction-source)", opts)
+  --     -- Apply the most preferred quickfix action on the current line.
+  --     keyset("n", "<leader>qf", "<Plug>(coc-fix-current)", opts)
+  --     
+  --     -- Remap keys for apply refactor code actions.
+  --     keyset("n", "<leader>re", "<Plug>(coc-codeaction-refactor)", { silent = true })
+  --     keyset("x", "<leader>r", "<Plug>(coc-codeaction-refactor-selected)", { silent = true })
+  --     keyset("n", "<leader>r", "<Plug>(coc-codeaction-refactor-selected)", { silent = true })
+  --     
+  --     -- Run the Code Lens actions on the current line
+  --     keyset("n", "<leader>cl", "<Plug>(coc-codelens-action)", opts)
+  --     
+  --     
+  --     -- Map function and class text objects
+  --     -- NOTE - Requires 'textDocument.documentSymbol' support from the language server
+  --     keyset("x", "if", "<Plug>(coc-funcobj-i)", opts)
+  --     keyset("o", "if", "<Plug>(coc-funcobj-i)", opts)
+  --     keyset("x", "af", "<Plug>(coc-funcobj-a)", opts)
+  --     keyset("o", "af", "<Plug>(coc-funcobj-a)", opts)
+  --     keyset("x", "ic", "<Plug>(coc-classobj-i)", opts)
+  --     keyset("o", "ic", "<Plug>(coc-classobj-i)", opts)
+  --     keyset("x", "ac", "<Plug>(coc-classobj-a)", opts)
+  --     keyset("o", "ac", "<Plug>(coc-classobj-a)", opts)
+  --     
+  --     
+  --     -- Remap <C-f> and <C-b> to scroll float windows/popups
+  --     ---@diagnostic disable-next-line: redefined-local
+  --     local opts = {silent = true, nowait = true, expr = true}
+  --     keyset("n", "<C-f>", 'coc#float#has_scroll() ? coc#float#scroll(1) : "<C-f>"', opts)
+  --     keyset("n", "<C-b>", 'coc#float#has_scroll() ? coc#float#scroll(0) : "<C-b>"', opts)
+  --     keyset("i", "<C-f>",
+  --            'coc#float#has_scroll() ? "<c-r>=coc#float#scroll(1)<cr>" : "<Right>"', opts)
+  --     keyset("i", "<C-b>",
+  --            'coc#float#has_scroll() ? "<c-r>=coc#float#scroll(0)<cr>" : "<Left>"', opts)
+  --     keyset("v", "<C-f>", 'coc#float#has_scroll() ? coc#float#scroll(1) : "<C-f>"', opts)
+  --     keyset("v", "<C-b>", 'coc#float#has_scroll() ? coc#float#scroll(0) : "<C-b>"', opts)
+  --     
+  --     
+  --     -- Use CTRL-S for selections ranges
+  --     -- Requires 'textDocument/selectionRange' support of language server
+  --     keyset("n", "<C-s>", "<Plug>(coc-range-select)", {silent = true})
+  --     keyset("x", "<C-s>", "<Plug>(coc-range-select)", {silent = true})
+  --     
+  --     
+  --     -- Add `:Format` command to format current buffer
+  --     vim.api.nvim_create_user_command("Format", "call CocAction('format')", {})
+  --     
+  --     -- " Add `:Fold` command to fold current buffer
+  --     vim.api.nvim_create_user_command("Fold", "call CocAction('fold', <f-args>)", {nargs = '?'})
+  --     
+  --     -- Add `:OR` command for organize imports of the current buffer
+  --     vim.api.nvim_create_user_command("OR", "call CocActionAsync('runCommand', 'editor.action.organizeImport')", {})
+  --     
+  --     -- Add (Neo)Vim's native statusline support
+  --     -- NOTE - Please see `:h coc-status` for integrations with external plugins that
+  --     -- provide custom statusline: lightline.vim, vim-airline
+  --     vim.opt.statusline:prepend("%{coc#status()}%{get(b:,'coc_current_function','')}")
+  --     
+  --     -- Mappings for CoCList
+  --     -- code actions and coc stuff
+  --     ---@diagnostic disable-next-line: redefined-local
+  --     local opts = {silent = true, nowait = true}
+  --     -- Show all diagnostics
+  --     keyset("n", "<leader>Ca", ":<C-u>CocList diagnostics<cr>", opts)
+  --     -- Manage extensions
+  --     keyset("n", "<leader>Ce", ":<C-u>CocList extensions<cr>", opts)
+  --     -- Show commands
+  --     keyset("n", "<leader>Cc", ":<C-u>CocList commands<cr>", opts)
+  --     -- Find symbol of current document
+  --     keyset("n", "<leader>Co", ":<C-u>CocList outline<cr>", opts)
+  --     -- Search workspace symbols
+  --     keyset("n", "<leader>Cs", ":<C-u>CocList -I symbols<cr>", opts)
+  --     -- Do default action for next item
+  --     keyset("n", "<leader>Cj", ":<C-u>CocNext<cr>", opts)
+  --     -- Do default action for previous item
+  --     keyset("n", "<leader>Ck", ":<C-u>CocPrev<cr>", opts)
+  --     -- Resume latest coc list
+  --     keyset("n", "<leader>Cp", ":<C-u>CocListResume<cr>", opts)
+  --
+  --
+  --   end,
+  -- },
+
   -- The following two comments only work if you have downloaded the kickstart repo, not just copy pasted the
   -- init.lua. If you want these files, they are in the repository, so you can just download them and
   -- put them in the right spots if you want.
@@ -1033,6 +1225,8 @@ require('lazy').setup({
     },
   },
 })
+
+
 
 -- The line beneath this is called `modeline`. See `:help modeline`
 -- vim: ts=2 sts=2 sw=2 et
