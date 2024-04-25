@@ -1,12 +1,34 @@
-# My Neovim Config, based on kickstart.nvim
+# My NeoVim Config, based on kickstart.nvim
 
 ## Preface
 
 I'm uploading this mostly so I can more easily share my nvim config between 
 devices, but if you find it useful, even better!
 
+### Nix note
+
+One addition I made is to add a keymap to quickly edit the NeoVim config.
+This keymap is <leader>jc.
+
+In most of my setups I use this with the $MYVIMRC_NIX environment variable set.
+
 If you don't have a $MYVIMRC_NIX environment variable set, remember to set the 
-<leader>jc command to use $MYVIMRC instead
+<leader>jc command to use $MYVIMRC instead (just comment/uncomment the 
+relevant lines).
+
+$MYVIMRC_NIX is used primarily for Nix Home Manager compatibility. NeoVim will 
+look for $MYVIMRC in ~/.config/nvim/ by default (which is good), but Home 
+Manager will replace any files it's managing with a symlink to the root file. 
+
+To adapt to this, we leave $MYVIMRC to reference the symlink and set 
+$MYVIMRC_NIX to reference the root file. This way we can use <leader>jc to edit 
+the root file.
+
+Please note that with my personal NixOS setup, this means that a nixos-rebuild 
+is necessary for any changes made to the NeoVim config to take effect. This may 
+be a consequence of packaging my NixOS into a Flake, but I'm not sure.
+
+### Conclude Preface
 
 The remainder of this README is unchanged from kickstart.nvim
 
