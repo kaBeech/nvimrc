@@ -28,6 +28,14 @@ Please note that with my personal NixOS setup, this means that a nixos-rebuild
 is necessary for any changes made to the NeoVim config to take effect. This may 
 be a consequence of packaging my NixOS into a Flake, but I'm not sure.
 
+### To run as a Nix Flake on Mac or Linux:
+  
+  * [Install Nix](https://nixos.org/download/)
+  * [Enable Flakes](https://nixos.wiki/wiki/Flakes)
+  * `git clone https://github.com/kaBeech/nvimrc.git "${XDG_CONFIG_HOME:-$HOME/.config}"/nvim`
+  * `nix develop "${XDG_CONFIG_HOME:-$HOME/.config}"/nvim`
+  * `nvim`
+
 ### Conclude Preface
 
 The remainder of this README is unchanged from kickstart.nvim
