@@ -663,7 +663,7 @@ require('lazy').setup({
         clangd = {},
         -- hls = {}, -- If using Nix, declare hls in Nix instead
         -- gopls = {}, -- If using Nix, declare gopls in Nix instead
-        pyright = {},
+        -- pyright = {},
         rust_analyzer = {},
         -- ocamllsp = {}, -- If using Nix, declare ocamllsp in Nix instead
         -- ... etc. See `:help lspconfig-all` for a list of all the pre-configured LSPs
@@ -672,7 +672,7 @@ require('lazy').setup({
         --    https://github.com/pmizio/typescript-tools.nvim
         --
         -- But for many setups, the LSP (`tsserver`) will work just fine
-        tsserver = {},
+        -- tsserver = {},
         --
 
         lua_ls = {
